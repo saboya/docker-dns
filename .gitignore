@@ -1,2 +1,3 @@
 Dockerfile_id_rsa*
-conf/certs.d/*
+conf/certs.d/hud.cert
+conf/certs.d/hud.key
