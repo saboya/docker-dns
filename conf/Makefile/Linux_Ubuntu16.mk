@@ -10,12 +10,14 @@ RESOLVCONF := /etc/resolvconf/resolv.conf.d/head
 PACKAGE_MANAGER=apt-get
 
 install-dependencies-os:
+	@[ `sudo -n true 2>/dev/null` ]; printf "\033[32mPlease type your sudo password, for network configuration.\033[m\n" && sudo ls > /dev/null
+	@sudo ${PACKAGE_MANAGER} install `cat requirements.apt` -y
+
+install-os:
 	@if [ ! -d /etc/resolvconf/resolv.conf.d ]; then sudo mkdir -p /etc/resolvconf/resolv.conf.d; fi
 	@if [ ! -f /etc/resolvconf/resolv.conf.d/head ]; then sudo touch /etc/resolvconf/resolv.conf.d/head; fi
 	@echo "options timeout:1 #@docker-dns\nnameserver $(IP) #@docker-dns" | sudo tee -a /etc/resolvconf/resolv.conf.d/head;
 	@test resolvconf && sudo resolvconf -u
-
-install-os:
 
 uninstall-os:
 	@if [ -f /etc/resolvconf/resolv.conf.d/head ]; then \

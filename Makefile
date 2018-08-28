@@ -59,13 +59,7 @@ build-docker-image:
 ifeq ($(UNAME), Darwin)
 install-dependencies: install-dependencies-macos
 else
-install-dependencies:
-	@[ `sudo -n true 2>/dev/null` ]; printf "\033[32mPlease type your sudo password, for network configuration.\033[m\n" && sudo ls > /dev/null
-	@sudo ${PACKAGE_MANAGER} install `cat requirements.apt` -y
-ifeq ($(shell grep @docker-dns $(RESOLVCONF) | wc -l | bc ),0)
-	@echo "options timeout:1 #@docker-dns\nnameserver $(IP) #@docker-dns" | sudo cat - $(RESOLVCONF) > /tmp/docker-dns-resolv; sudo mv /tmp/docker-dns-resolv $(RESOLVCONF)
-endif
-	@make install-dependencies-os
+install-dependencies: install-dependencies-os
 endif
 
 update-conf:
